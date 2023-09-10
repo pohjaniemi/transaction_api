@@ -1,0 +1,1 @@
+CREATE DATABASE thales_demo;
