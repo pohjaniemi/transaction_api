@@ -9,7 +9,7 @@ import java.sql.Timestamp;
 /**
  *  Transaction from the authentication service.
  *
- *  Created by Joni Pohjaniemi
+ *  @author Joni Pohjaniemi
  */
 
 @Entity

@@ -43,6 +43,24 @@ public class TransactionDataService {
     }
 
     /**
+     * Search by data key.
+     *
+     * @return all matching key-value pairs
+     */
+    public Iterable<TransactionData> searchByDataKey(String key) {
+        return transactionDataRepository.findByDataKey(key);
+    }
+
+    /**
+     * Search by data value.
+     *
+     * @return all matching key-value pairs
+     */
+    public Iterable<TransactionData> searchByDataValue(String partialString) {
+        return transactionDataRepository.findByDataValueContains(partialString);
+    }
+
+    /**
      * Calculate the number of key-value pairs in the DB.
      *
      * @return the total

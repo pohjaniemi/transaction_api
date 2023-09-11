@@ -39,12 +39,30 @@ public class TransactionService {
     }
 
     /**
-     * Lookup all transactions.
+     * Find all transactions.
      *
      * @return all transactions
      */
     public Iterable<Transaction> lookup() {
         return transactionRepository.findAll();
+    }
+
+    /**
+     * Search by type.
+     *
+     * @return all matching transactions
+     */
+    public Iterable<Transaction> searchByType(String type) {
+        return transactionRepository.findByType(type);
+    }
+
+    /**
+     * Search by actor.
+     *
+     * @return all matching transactions
+     */
+    public Iterable<Transaction> searchByActor(String actor) {
+        return transactionRepository.findByActor(actor);
     }
 
     /**

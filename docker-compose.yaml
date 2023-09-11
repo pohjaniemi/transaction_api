@@ -5,8 +5,8 @@ services:
     image: mysql:8.0.34
     volumes:
       - db_data:/var/lib/mysql
-      - ./db/schema.sql:/docker-entrypoint-initdb.d/1.sql
-    command: --default-authentication-plugin=mysql_native_password
+      - ./db/create.sql:/docker-entrypoint-initdb.d/1.sql
+    command: --default-authentication-plugin=caching_sha2_password
     environment:
       MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
       MYSQL_DATABASE: thales_demo
