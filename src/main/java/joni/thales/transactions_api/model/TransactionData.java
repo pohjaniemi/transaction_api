@@ -2,33 +2,60 @@ package joni.thales.transactions_api.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 /**
  *  Key-value data related to a transaction.
- *
- *  @author Joni Pohjaniemi
  */
-
 @Entity
 public class TransactionData {
 
-    @Id
-    @GeneratedValue (strategy = GenerationType.IDENTITY)
-    private Integer dataId;
-
-    @Column
-    private String dataKey;
-
+    @EmbeddedId
+    DataId id;
     @Column
     private String dataValue;
 
-    @ManyToOne
-    private Transaction transaction;
-
     protected TransactionData() {}
 
-    public TransactionData(String dataKey, String dataValue, Transaction transaction) {
-        this.dataKey = dataKey;
+    public TransactionData(DataId dataId, String dataValue) {
+        this.id = dataId;
         this.dataValue = dataValue;
-        this.transaction = transaction;
+    }
+
+    public DataId getId() {
+        return id;
+    }
+
+    public void setId(DataId id) {
+        this.id = id;
+    }
+
+    public String getDataValue() {
+        return dataValue;
+    }
+
+    public void setDataValue(String dataValue) {
+        this.dataValue = dataValue;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TransactionData that = (TransactionData) o;
+        return id.equals(that.id) && dataValue.equals(that.dataValue);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, dataValue);
+    }
+
+    @Override
+    public String toString() {
+        return "TransactionData{" +
+                "id=" + id +
+                ", dataValue='" + dataValue + '\'' +
+                '}';
     }
 }

@@ -1,18 +1,20 @@
 package joni.thales.transactions_api.service;
 
 import joni.thales.transactions_api.model.Transaction;
-import joni.thales.transactions_api.repo.TransactionRepository;
+import joni.thales.transactions_api.repository.TransactionRepository;
+import org.apache.commons.collections4.IterableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.Optional;
 
 /**
  *  Service to perform CRUD operations on authentication transactions.
  */
-
 @Service
 public class TransactionService {
 
@@ -33,9 +35,20 @@ public class TransactionService {
      * @param actor     Actor as string
      * @return new or existing transaction
      */
-    public Transaction createTransaction(Integer id, Timestamp timestamp, String type, String actor) {
+    public Transaction create(Integer id, Timestamp timestamp, String type, String actor) {
+        logger.info("Create transaction with ID {}", id);
         return transactionRepository.findById(id)
                 .orElse(transactionRepository.save(new Transaction(id, timestamp, type, actor)));
+    }
+
+    /**
+     * Save an authentication transaction object.
+     *
+     * @param transaction Transaction object to save
+     */
+    public void save(Transaction transaction) {
+        logger.info("Saving transaction with ID {}", transaction.getId());
+        transactionRepository.save(transaction);
     }
 
     /**
@@ -43,8 +56,27 @@ public class TransactionService {
      *
      * @return all transactions
      */
-    public Iterable<Transaction> lookup() {
-        return transactionRepository.findAll();
+    public List<Transaction> lookup() {
+        return IterableUtils.toList(transactionRepository.findAll());
+    }
+
+    /**
+     * Find transaction by ID.
+     *
+     * @param id Transaction ID
+     * @return optional with transaction
+     */
+    public Optional<Transaction> findById(Integer id) {
+        return transactionRepository.findById(id);
+    }
+
+    /**
+     * Delete transaction by ID.
+     *
+     * @param id Transaction ID
+     */
+    public void deleteById(Integer id) {
+        transactionRepository.deleteById(id);
     }
 
     /**

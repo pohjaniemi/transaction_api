@@ -2,8 +2,9 @@ package joni.thales.transactions_api.service;
 
 import joni.thales.transactions_api.model.Transaction;
 import joni.thales.transactions_api.model.TransactionData;
-import joni.thales.transactions_api.repo.TransactionDataRepository;
-import joni.thales.transactions_api.repo.TransactionRepository;
+import joni.thales.transactions_api.model.DataId;
+import joni.thales.transactions_api.repository.TransactionDataRepository;
+import joni.thales.transactions_api.repository.TransactionRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +34,14 @@ public class TransactionDataService {
      * @return the newly created key-value pair
      */
     public TransactionData createTransactionData(String key, String value, Integer transactionID) {
-        Transaction transaction = transactionRepository.findById(transactionID)
+        final Transaction transaction = transactionRepository.findById(transactionID)
                 .orElseThrow(() -> {
                     logger.warn("Transaction ID not found: {}", transactionID);
                     return new RuntimeException("Transaction ID not found: " + transactionID);
                 });
 
-        return transactionDataRepository.save(new TransactionData(key, value, transaction));
+        final DataId dataId = new DataId(transaction, key);
+        return transactionDataRepository.save(new TransactionData(dataId, value));
     }
 
     /**
@@ -47,8 +49,8 @@ public class TransactionDataService {
      *
      * @return all matching key-value pairs
      */
-    public Iterable<TransactionData> searchByDataKey(String key) {
-        return transactionDataRepository.findByDataKey(key);
+    public Iterable<TransactionData> searchByKey(String key) {
+        return transactionDataRepository.findByIdDataKey(key);
     }
 
     /**
@@ -56,7 +58,7 @@ public class TransactionDataService {
      *
      * @return all matching key-value pairs
      */
-    public Iterable<TransactionData> searchByDataValue(String partialString) {
+    public Iterable<TransactionData> searchByValue(String partialString) {
         return transactionDataRepository.findByDataValueContains(partialString);
     }
 

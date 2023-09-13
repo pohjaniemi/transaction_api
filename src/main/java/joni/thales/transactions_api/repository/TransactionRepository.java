@@ -1,4 +1,4 @@
-package joni.thales.transactions_api.repo;
+package joni.thales.transactions_api.repository;
 
 import joni.thales.transactions_api.model.Transaction;
 import org.springframework.data.repository.CrudRepository;
@@ -9,8 +9,6 @@ import java.util.List;
 /**
  *  Spring Data JPA CRUD repository for transactions.
  *  Extended with custom search operations.
- *
- *  @author Joni Pohjaniemi
  */
 @RepositoryRestResource(exported = false)
 public interface TransactionRepository extends CrudRepository<Transaction, Integer> {
