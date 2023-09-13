@@ -1,9 +1,12 @@
 package joni.thales.transactions_api.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 
 import java.io.Serializable;
 import java.util.Objects;
+
+import static joni.thales.transactions_api.validation.ValidationPatterns.REGEX_ALPHANUMERIC;
 
 /**
  *  Composite primary key for key-value pairs.
@@ -15,6 +18,7 @@ public class DataId implements Serializable {
     @JoinColumn
     private Transaction transaction;
     @Column
+    @Pattern(regexp = REGEX_ALPHANUMERIC)
     private String dataKey;
 
     public DataId() {}

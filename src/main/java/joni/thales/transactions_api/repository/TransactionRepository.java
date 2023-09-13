@@ -15,5 +15,6 @@ public interface TransactionRepository extends CrudRepository<Transaction, Integ
 
     List<Transaction> findByType(String type);
     List<Transaction> findByActor(String actor);
+    List<Transaction> findByTypeAndActor(String type, String actor);
 
 }

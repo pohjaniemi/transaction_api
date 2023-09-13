@@ -56,7 +56,7 @@ public class TransactionService {
      *
      * @return all transactions
      */
-    public List<Transaction> lookup() {
+    public List<Transaction> findAll() {
         return IterableUtils.toList(transactionRepository.findAll());
     }
 
@@ -84,7 +84,7 @@ public class TransactionService {
      *
      * @return all matching transactions
      */
-    public Iterable<Transaction> searchByType(String type) {
+    public List<Transaction> searchByType(String type) {
         return transactionRepository.findByType(type);
     }
 
@@ -93,17 +93,16 @@ public class TransactionService {
      *
      * @return all matching transactions
      */
-    public Iterable<Transaction> searchByActor(String actor) {
+    public List<Transaction> searchByActor(String actor) {
         return transactionRepository.findByActor(actor);
     }
 
     /**
-     * Calculate the number of transactions in the DB.
+     * Search by type and actor.
      *
-     * @return the total
+     * @return all matching transactions
      */
-    public long total() {
-        return transactionRepository.count();
+    public List<Transaction> searchByTypeAndActor(String type, String actor) {
+        return transactionRepository.findByTypeAndActor(type, actor);
     }
-
 }

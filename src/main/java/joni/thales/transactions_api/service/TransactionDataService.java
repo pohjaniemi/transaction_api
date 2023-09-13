@@ -5,10 +5,15 @@ import joni.thales.transactions_api.model.TransactionData;
 import joni.thales.transactions_api.model.DataId;
 import joni.thales.transactions_api.repository.TransactionDataRepository;
 import joni.thales.transactions_api.repository.TransactionRepository;
+import org.apache.commons.collections4.IterableUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 /**
  *  Service to manage key-value pairs for transactions.
@@ -37,7 +42,7 @@ public class TransactionDataService {
         final Transaction transaction = transactionRepository.findById(transactionID)
                 .orElseThrow(() -> {
                     logger.warn("Transaction ID not found: {}", transactionID);
-                    return new RuntimeException("Transaction ID not found: " + transactionID);
+                    return new NoSuchElementException("Transaction ID not found: " + transactionID);
                 });
 
         final DataId dataId = new DataId(transaction, key);
@@ -45,27 +50,46 @@ public class TransactionDataService {
     }
 
     /**
-     * Search by data key.
+     * Save a key-value pair to a transaction.
      *
-     * @return all matching key-value pairs
+     * @param transactionData Transaction data object to save
      */
-    public Iterable<TransactionData> searchByKey(String key) {
-        return transactionDataRepository.findByIdDataKey(key);
+    public void save(TransactionData transactionData) {
+        logger.info("Saving key-value pair with data key {}", transactionData.getId().getDataKey());
+        transactionDataRepository.save(transactionData);
+    }
+
+    /**
+     * Find data key-value pair by composite data ID.
+     *
+     * @param id Composite data ID
+     * @return optional with key-value pair
+     */
+    public Optional<TransactionData> findById(DataId id) {
+        return transactionDataRepository.findById(id);
+    }
+
+    /**
+     * Delete data key-value pair by composite data ID.
+     *
+     * @param id Composite data ID
+     */
+    public void deleteById(DataId id) {
+        transactionDataRepository.deleteById(id);
     }
 
     /**
      * Search by data value.
      *
+     * @param transaction Transaction scope
+     * @param partialString String to search for in values
      * @return all matching key-value pairs
      */
-    public Iterable<TransactionData> searchByValue(String partialString) {
-        return transactionDataRepository.findByDataValueContains(partialString);
+    public List<TransactionData> searchByValue(Transaction transaction,
+                                               String partialString) {
+        return IterableUtils.toList(
+                transactionDataRepository.findById_TransactionAndDataValueContains(transaction, partialString)
+        );
     }
 
-    /**
-     * Calculate the number of key-value pairs in the DB.
-     *
-     * @return the total
-     */
-    public long total() { return transactionDataRepository.count(); }
 }

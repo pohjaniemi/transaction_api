@@ -1,6 +1,9 @@
 package joni.thales.transactions_api.dto;
 
+import jakarta.validation.constraints.Pattern;
 import org.springframework.lang.NonNull;
+
+import static joni.thales.transactions_api.validation.ValidationPatterns.REGEX_ALPHANUMERIC;
 
 /**
  *  Data Transfer Object for data key-value pairs.
@@ -8,6 +11,7 @@ import org.springframework.lang.NonNull;
 public class TransactionDataDTO {
 
     @NonNull
+    @Pattern(regexp = REGEX_ALPHANUMERIC)
     private String dataKey;
     @NonNull
     private String dataValue;

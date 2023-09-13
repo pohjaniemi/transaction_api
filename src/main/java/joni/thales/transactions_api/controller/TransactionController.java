@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import joni.thales.transactions_api.dto.TransactionDTO;
 import joni.thales.transactions_api.mapping.TransactionMapper;
+import joni.thales.transactions_api.model.Transaction;
 import joni.thales.transactions_api.service.TransactionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,18 +34,51 @@ public class TransactionController {
     /**
      *  List all transactions.
      *
+     *  Optional search query parameters:
+     *  /transactions?type=Special&actor=Famous
+     *
+     *  @param type Type to search for (optional)
+     *  @param actor Actor to search for (optional)
+     *
      *  @return list of transactions
      */
-    @Operation(summary = "List all transactions", description = "Get list of all transactions.")
+    @Operation(summary = "List all transactions (or search)", description = "Get list of all transactions. You can also search for type or actor.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved")
     })
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     @ResponseBody
-    public List<TransactionDTO> listTransactions() {
-        logger.debug("GET /transactions");
-        return transactionService.lookup().stream().map(TransactionMapper::convertToDto).collect(Collectors.toList());
+    public List<TransactionDTO> listTransactions(@RequestParam(value = "type", required = false) String type,
+                                                 @RequestParam(value = "actor", required = false) String actor) {
+        List<Transaction> transactionList;
+
+        // List all
+        if (type == null && actor == null){
+            logger.info("GET /transactions");
+            transactionList = transactionService.findAll();
+        }
+        // Search for type + actor
+        else if (type != null && actor != null) {
+            logger.info("GET /transactions  -> type ({}), actor ({})", type, actor);
+            transactionList = transactionService.searchByTypeAndActor(type, actor);
+        }
+        // Search for type
+        else if (type != null) {
+            logger.info("GET /transactions  -> type ({})", type);
+            transactionList = transactionService.searchByType(type);
+        }
+        // Search for actor
+        else {
+            logger.info("GET /transactions  -> actor ({})", actor);
+            transactionList = transactionService.searchByActor(actor);
+        }
+
+        // Convert results to DTO
+        if (transactionList != null){
+            return transactionList.stream().map(TransactionMapper::convertToDto).collect(Collectors.toList());
+        }
+        return null;
     }
 
     /**
@@ -52,8 +86,7 @@ public class TransactionController {
      */
     @Operation(summary = "Save transaction", description = "Create or update an existing transaction.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "201", description = "Successfully created"),
-            @ApiResponse(responseCode = "404", description = "Not found - The transaction was not found")
+            @ApiResponse(responseCode = "201", description = "Successfully created")
     })
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -80,7 +113,7 @@ public class TransactionController {
         logger.debug("GET /transactions/{}", id);
         return transactionService.findById(id)
                 .map(TransactionMapper::convertToDto)
-                .orElseThrow(() -> new NoSuchElementException("Item not found."));
+                .orElseThrow(() -> new NoSuchElementException("Transaction not found."));
     }
 
     /**
@@ -98,8 +131,8 @@ public class TransactionController {
     public void deleteTransaction(@PathVariable("id") Integer id) {
         logger.debug("DELETE /transactions/{}", id);
         transactionService.findById(id).ifPresentOrElse(
-                (transaction) -> { transactionService.deleteById(transaction.getId()); },
-                () -> { throw new NoSuchElementException("Deletion failed. Item not found."); }
+                (transaction) -> { transactionService.deleteById(id); },
+                () -> { throw new NoSuchElementException("Deletion failed. Transaction not found."); }
         );
     }
 

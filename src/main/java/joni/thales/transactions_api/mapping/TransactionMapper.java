@@ -65,7 +65,7 @@ public class TransactionMapper {
         return transaction;
     }
 
-    private static TransactionData convertDataToEntity(TransactionDataDTO transactionDataDTO, Transaction transaction) {
+    public static TransactionData convertDataToEntity(TransactionDataDTO transactionDataDTO, Transaction transaction) {
         logger.debug("Converting data from DTO to entity. BEFORE: Data key {}, data value {}",
                 transactionDataDTO.getDataKey(),
                 transactionDataDTO.getDataValue()
@@ -84,7 +84,7 @@ public class TransactionMapper {
         return transactionData;
     }
 
-    private static TransactionDataDTO convertDataToDTO(TransactionData transactionData){
+    public static TransactionDataDTO convertDataToDTO(TransactionData transactionData){
         logger.debug("Converting data from entity to DTO. BEFORE: Txn id {}, Data key {}, data value {}",
                 transactionData.getId().getTransaction().getId(),
                 transactionData.getId().getDataKey(),
