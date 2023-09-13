@@ -7,7 +7,7 @@ import org.springframework.data.rest.core.annotation.RepositoryRestResource;
 import java.util.List;
 
 /**
- *  Spring Data JPA CRUD repository for transactions.
+ *  Spring CRUD repository for key-value pairs.
  */
 @RepositoryRestResource(exported = false)
 public interface TransactionDataRepository extends CrudRepository<TransactionData, Integer> {
