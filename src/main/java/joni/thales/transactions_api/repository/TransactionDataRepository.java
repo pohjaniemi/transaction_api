@@ -14,7 +14,5 @@ import java.util.List;
 @RepositoryRestResource(exported = false)
 public interface TransactionDataRepository extends CrudRepository<TransactionData, DataId> {
 
-    List<TransactionData> findByDataValueContains(String partialString);
-
     List<TransactionData> findById_TransactionAndDataValueContains(Transaction transaction, String partialString);
 }
