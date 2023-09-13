@@ -1,6 +1,8 @@
 package joni.thales.transactions_api.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import joni.thales.transactions_api.dto.TransactionDTO;
 import joni.thales.transactions_api.mapping.TransactionMapper;
 import joni.thales.transactions_api.service.TransactionService;
@@ -34,7 +36,11 @@ public class TransactionController {
      *  @return list of transactions
      */
     @Operation(summary = "List all transactions", description = "Get list of all transactions.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved")
+    })
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public List<TransactionDTO> listTransactions() {
         logger.debug("GET /transactions");
@@ -44,8 +50,13 @@ public class TransactionController {
     /**
      *  Create (or update) a transaction.
      */
-    @Operation(summary = "Save transaction", description = "Create or update an existing transaction.   ")
+    @Operation(summary = "Save transaction", description = "Create or update an existing transaction.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully created"),
+            @ApiResponse(responseCode = "404", description = "Not found - The transaction was not found")
+    })
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public void createTransaction(@RequestBody TransactionDTO transactionDTO) {
         logger.debug("POST /transactions/  -> Transaction id {}", transactionDTO.getId());
         transactionService.save(TransactionMapper.convertToEntity(transactionDTO));
@@ -58,7 +69,12 @@ public class TransactionController {
      *  @throws NoSuchElementException if transaction was not found
      */
     @Operation(summary = "Get transaction by ID", description = "Get a specific transaction by ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved"),
+            @ApiResponse(responseCode = "404", description = "Not found - The transaction was not found")
+    })
     @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
     @ResponseBody
     public TransactionDTO getTransaction(@PathVariable("id") Integer id) {
         logger.debug("GET /transactions/{}", id);
@@ -73,7 +89,12 @@ public class TransactionController {
      *  @throws NoSuchElementException if transaction was not found
      */
     @Operation(summary = "Delete transaction by ID", description = "Delete a specific transaction by ID.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "Successfully deleted"),
+            @ApiResponse(responseCode = "404", description = "Not found - The transaction was not found")
+    })
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteTransaction(@PathVariable("id") Integer id) {
         logger.debug("DELETE /transactions/{}", id);
         transactionService.findById(id).ifPresentOrElse(
