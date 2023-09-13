@@ -1,5 +1,6 @@
 package joni.thales.transactions_api.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
 import joni.thales.transactions_api.dto.TransactionDTO;
 import joni.thales.transactions_api.mapping.TransactionMapper;
 import joni.thales.transactions_api.service.TransactionService;
@@ -27,6 +28,12 @@ public class TransactionController {
     @Autowired
     private TransactionService transactionService;
 
+    /**
+     *  List all transactions.
+     *
+     *  @return list of transactions
+     */
+    @Operation(summary = "List all transactions", description = "Get list of all transactions.")
     @GetMapping
     @ResponseBody
     public List<TransactionDTO> listTransactions() {
@@ -34,12 +41,23 @@ public class TransactionController {
         return transactionService.lookup().stream().map(TransactionMapper::convertToDto).collect(Collectors.toList());
     }
 
+    /**
+     *  Create (or update) a transaction.
+     */
+    @Operation(summary = "Save transaction", description = "Create or update an existing transaction.   ")
     @PostMapping
     public void createTransaction(@RequestBody TransactionDTO transactionDTO) {
         logger.debug("POST /transactions/  -> Transaction id {}", transactionDTO.getId());
         transactionService.save(TransactionMapper.convertToEntity(transactionDTO));
     }
 
+    /**
+     *  Get a specific transaction by ID.
+     *
+     *  @return transaction
+     *  @throws NoSuchElementException if transaction was not found
+     */
+    @Operation(summary = "Get transaction by ID", description = "Get a specific transaction by ID.")
     @GetMapping("/{id}")
     @ResponseBody
     public TransactionDTO getTransaction(@PathVariable("id") Integer id) {
@@ -49,6 +67,12 @@ public class TransactionController {
                 .orElseThrow(() -> new NoSuchElementException("Item not found."));
     }
 
+    /**
+     *  Delete a specific transaction by ID.
+     *
+     *  @throws NoSuchElementException if transaction was not found
+     */
+    @Operation(summary = "Delete transaction by ID", description = "Delete a specific transaction by ID.")
     @DeleteMapping("/{id}")
     public void deleteTransaction(@PathVariable("id") Integer id) {
         logger.debug("DELETE /transactions/{}", id);
@@ -62,7 +86,7 @@ public class TransactionController {
      * Exception handler if NoSuchElementException is thrown.
      *
      * @param ex exception
-     * @return Error message String.
+     * @return Error message
      */
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoSuchElementException.class)
