@@ -7,7 +7,7 @@ https://github.com/pohjaniemi/transaction_api
 
 ### Pre-requisites
 
-To run this demo project from your own machine, make sure you have [Git](https://git-scm.com/downloads) and [Docker](https://docs.docker.com/get-docker/) installed first.
+>To run this demo project from your own machine, make sure you have [Git](https://git-scm.com/downloads) and [Docker](https://docs.docker.com/get-docker/) installed first.
 
 ### Installation steps
 
