@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 public class TransactionServiceTest {
 
     private static final Integer TRANSACTION_ID = 123;
+    private static final Integer TRANSACTION_ID_NEW = 1234;
     private static final String TRANSACTION_TIMESTAMP = "2023-12-11 10:09:08";
     private static final String TRANSACTION_TYPE = "Testing";
     private static final String TRANSACTION_ACTOR = "Client Name";
@@ -38,16 +39,11 @@ public class TransactionServiceTest {
     @Test
     public void save() {
         final Timestamp timestamp = TransactionMapper.toSQLTimestamp(TRANSACTION_TIMESTAMP);
-        final Transaction transaction = new Transaction(TRANSACTION_ID, timestamp, TRANSACTION_TYPE, TRANSACTION_ACTOR);
+        final Transaction transaction = new Transaction(TRANSACTION_ID_NEW, timestamp, TRANSACTION_TYPE, TRANSACTION_ACTOR);
 
         service.save(transaction);
 
-        // Verify individual fields
-        Transaction savedTransaction = service.findById(TRANSACTION_ID).get();
-        assertEquals(savedTransaction.getId(), TRANSACTION_ID);
-        assertEquals(savedTransaction.getTimestamp(), timestamp);
-        assertEquals(savedTransaction.getType(), TRANSACTION_TYPE);
-        assertEquals(savedTransaction.getActor(), TRANSACTION_ACTOR);
+        verify(transactionRepositoryMock).save(transaction);
     }
 
     @Test
