@@ -27,21 +27,6 @@ public class TransactionService {
     }
 
     /**
-     * Create an authentication transaction.
-     *
-     * @param id        Unique integer ID
-     * @param timestamp Transaction time
-     * @param type      Type as string
-     * @param actor     Actor as string
-     * @return new or existing transaction
-     */
-    public Transaction create(Integer id, Timestamp timestamp, String type, String actor) {
-        logger.info("Create transaction with ID {}", id);
-        return transactionRepository.findById(id)
-                .orElse(transactionRepository.save(new Transaction(id, timestamp, type, actor)));
-    }
-
-    /**
      * Save an authentication transaction object.
      *
      * @param transaction Transaction object to save
@@ -82,6 +67,7 @@ public class TransactionService {
     /**
      * Search by type.
      *
+     * @param type
      * @return all matching transactions
      */
     public List<Transaction> searchByType(String type) {
@@ -91,6 +77,7 @@ public class TransactionService {
     /**
      * Search by actor.
      *
+     * @param actor
      * @return all matching transactions
      */
     public List<Transaction> searchByActor(String actor) {
@@ -100,6 +87,8 @@ public class TransactionService {
     /**
      * Search by type and actor.
      *
+     * @param type
+     * @param actor
      * @return all matching transactions
      */
     public List<Transaction> searchByTypeAndActor(String type, String actor) {

@@ -9,7 +9,11 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +26,9 @@ public class TransactionMapper {
 
     private static final ModelMapper modelMapper = new ModelMapper();
     private static final Logger logger = LoggerFactory.getLogger(TransactionMapper.class.getName());
+
+    private static final SimpleDateFormat dateFormat =
+            new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     public static TransactionDTO convertToDto(Transaction transaction) {
         logger.debug("Converting transaction {} to DTO. With data {}",
@@ -99,6 +106,15 @@ public class TransactionMapper {
         );
 
         return transactionDataDTO;
+    }
+
+    public static java.sql.Timestamp toSQLTimestamp(String dateString) {
+        try {
+            Date date = dateFormat.parse(dateString);
+            return new Timestamp(date.getTime());
+        }
+        catch (ParseException e){}
+        return null;
     }
 
 }
