@@ -8,13 +8,10 @@ services:
       - ./db/create.sql:/docker-entrypoint-initdb.d/1.sql
     command: --default-authentication-plugin=caching_sha2_password
     environment:
-      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/db_root_password
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
       MYSQL_DATABASE: thales_demo
       MYSQL_USER: user
-      MYSQL_PASSWORD_FILE: /run/secrets/db_password
-    secrets:
-        - db_root_password
-        - db_password
+      MYSQL_PASSWORD: ${DB_PASS}
     ports:
       - "3306:3306"
 
@@ -28,12 +25,6 @@ services:
       DB_HOST: db
       DB_USER: user
       DB_PASS: ${DB_PASS}
-
-secrets:
-  db_password:
-    file: ./secrets/db_password.txt
-  db_root_password:
-    file: ./secrets/db_root_password.txt
 
 volumes:
   db_data:
