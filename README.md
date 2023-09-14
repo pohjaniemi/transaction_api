@@ -17,7 +17,7 @@ https://github.com/pohjaniemi/transaction_api
 
 3. Add a **DB_PASS** environment variable to the <code>.env</code> file. Example: **DB_PASS=secret**
 4. Start the servers: 
-  <code>docker-compose up</code>
+  <code>docker-compose up -d</code>
 5. Verify that the server responds on http://localhost:8080/
 6. See the [OpenAPI definition](http://localhost:8080/swagger-ui/index.html) for the REST API endpoints.
 7. Tip: You can use the API directly in your browser. See the "Try it out" button in Swagger.
