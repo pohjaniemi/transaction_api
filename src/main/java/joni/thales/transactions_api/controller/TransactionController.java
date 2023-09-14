@@ -34,9 +34,6 @@ public class TransactionController {
     /**
      *  List all transactions.
      *
-     *  Optional search query parameters:
-     *  /transactions?type=Special&actor=Famous
-     *
      *  @param type Type to search for (optional)
      *  @param actor Actor to search for (optional)
      *
@@ -82,7 +79,9 @@ public class TransactionController {
     }
 
     /**
-     *  Create (or update) a transaction.
+     *  Create or update a transaction.
+     *
+     *  @param transactionDTO DTO for the transaction
      */
     @Operation(summary = "Save transaction", description = "Create or update an existing transaction.")
     @ApiResponses(value = {
@@ -98,6 +97,7 @@ public class TransactionController {
     /**
      *  Get a specific transaction by ID.
      *
+     *  @param id Transaction ID
      *  @return transaction
      *  @throws NoSuchElementException if transaction was not found
      */
@@ -119,6 +119,7 @@ public class TransactionController {
     /**
      *  Delete a specific transaction by ID.
      *
+     *  @param id Transaction ID
      *  @throws NoSuchElementException if transaction was not found
      */
     @Operation(summary = "Delete transaction by ID", description = "Delete a specific transaction by ID.")

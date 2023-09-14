@@ -89,7 +89,10 @@ public class TransactionDataController {
     }
 
     /**
-     *  Create (or update) a key-value pair.
+     *  Create or update a key-value pair.
+     *
+     *  @param id Transaction id
+     *  @param transactionDataDTO DTO for the key-value pair
      */
     @Operation(summary = "Save key-value pair", description = "Create or update an existing key-value pair.")
     @ApiResponses(value = {
@@ -112,6 +115,9 @@ public class TransactionDataController {
 
     /**
      *  Get a data key-value pair.
+     *
+     *  @param id Transaction id
+     *  @param dataKey Data key
      *
      *  @return transaction
      *  @throws NoSuchElementException if transaction was not found
@@ -145,6 +151,9 @@ public class TransactionDataController {
 
     /**
      *  Delete a specific key-value pair.
+     *
+     *  @param id Transaction id
+     *  @param dataKey Data key
      *
      *  @throws NoSuchElementException if either transaction or the data key was not found
      */
