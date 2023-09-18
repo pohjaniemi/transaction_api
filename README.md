@@ -5,9 +5,19 @@ Author: Joni Pohjaniemi
 GitHub repository:
 https://github.com/pohjaniemi/transaction_api
 
-### Pre-requisites
+### Try the online demo
 
->To run this demo project from your own machine, make sure to have [Git](https://git-scm.com/downloads) and [Docker](https://docs.docker.com/get-docker/) installed first.
+Documentation:
+
+https://api.pohjaniemi.com/docs/
+
+API root endpoint:
+
+https://api.pohjaniemi.com/transactions
+
+### Pre-requisites for local installation
+
+>To run this demo project locally on your own machine, make sure to have [Git](https://git-scm.com/downloads) and [Docker](https://docs.docker.com/get-docker/) installed first.
 
 ### Installation steps
 
